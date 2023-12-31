@@ -1,3 +1,4 @@
+"la reprisentation chainée"
 typedef struct element {
     int donnee;
     struct pile *suivant;
