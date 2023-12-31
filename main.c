@@ -1,3 +1,9 @@
+#include<SDL.h>
+#include<SDL_ttf.h>
+#include<stdio.h>
+#include<stdlib.h>
+
+
 int main(int argc, char* argv[]) {
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
