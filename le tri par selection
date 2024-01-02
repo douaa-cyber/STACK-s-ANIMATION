@@ -1,0 +1,35 @@
+"le tri par selection"
+void TrierPile(Pile *P) {
+    Pile T, Q;
+    int x, min;
+
+    Initpile(&T);
+    Initpile(&Q);
+
+    while (!PileVide(*P)) {
+        // Trouver le minimum dans la pile d'origine
+        min = SommetPile(*P);
+        while (!PileVide(*P)) {
+            Desempiler(P, &x);
+            Empiler(&T, x);
+            if (min > x) min = x;
+        }
+
+        // Transf�rer les �l�ments de T vers Q, sauf le minimum
+        while (!PileVide(T)) {
+            Desempiler(&T, &x);
+            if (x != min) {
+                Empiler(&Q, x);
+            }
+        }
+
+        // Placer le minimum dans la pile d'origine
+        Empiler(P, min);
+    }
+
+    // Transf�rer les �l�ments tri�s de Q vers la pile d'origine P
+    while (!PileVide(Q)) {
+        Desempiler(&Q, &x);
+        Empiler(P, x);
+    }
+}
