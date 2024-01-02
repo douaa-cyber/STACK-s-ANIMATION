@@ -36,45 +36,45 @@ int main(int argc, char* argv[]) {
         // Render the stacks
         renderStack(renderer, font, &p, &r, -1, -1, "A", "B", -1);
 
-
-        printf("Commands: P (push), O (pop), Q (quit):\n");
+        printf("Commands: P (push), O (pop), Q (quit), S (sort):\n");
         char input[10];
-        scanf("%s",&input);
+        scanf("%s", &input);
 
         if (input[0] == 'q' || input[0] == 'Q') {
             running = 0;
         } else if (input[0] == 'p' || input[0] == 'P') {
             printf("Enter a number to push: ");
-            scanf("%d",&nbr);
+            scanf("%d", &nbr);
 
-                // Check if the stack is full before pushing
-                if (!isFull(&p)) {
-                    push(&p, nbr);
-                } else {
-                    printf("Cannot push to a full stack.\n");
-                }
+            // Check if the stack is full before pushing
+            if (!isFull(&p)) {
+                push(&p, nbr);
+            } else {
+                printf("Cannot push to a full stack.\n");
             }
-         else if (input[0] == 'o' || input[0] == 'O') {
-            if(isEmpty(&p)){
-                 printf("Cannot pop from an empty stack.\n");
-                 break;
-            }
-            printf("Enter a number to pop: ");
-            scanf("%d",&n);
-
+        } else if (input[0] == 'o' || input[0] == 'O') {
+            if (isEmpty(&p)) {
+                printf("Cannot pop from an empty stack.\n");
+            } else {
+                printf("Enter a number to pop: ");
+                scanf("%d", &n);
 
                 // Check if the stack is empty before popping
                 if (!isEmpty(&p)) {
-                    animatePopValueWithTempStack(&p, n, &r, renderer, font);
+                    moveAboveToTemp(&p, n, &r, renderer, font);
                 }
-
-
+            }
+        } else if (input[0] == 's' || input[0] == 'S') {
+            if (isEmpty(&p)) {
+                printf("Cannot sort an empty stack.\n");
+            } else {
+                sort(&p, renderer, font);
             }
         }
 
         // Introduce a delay to control the frame rate
         SDL_Delay(FRAME_DELAY);
-
+    }
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
