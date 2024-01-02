@@ -1,0 +1,34 @@
+"la représentation chainée"
+typedef struct element {
+    int donnee;
+    struct pile *suivant;
+} element;
+
+typedef element* Pile;
+
+void initialiser(Pile *p) {
+    *p = NULL;
+}
+
+void empiler(Pile *p, int valeur) {
+    element *nouveau = malloc(sizeof(element));
+    nouveau->donnee = valeur;
+    nouveau->suivant = *p;
+    *p = nouveau;
+}
+void depiler(Pile *p) {
+    if (*p != NULL) {
+        element *temp = *p;
+        *p = (*p)->suivant;
+        free(temp);
+    }
+}
+int sommet(Pile p) {
+    if (p != NULL) {
+        return p->donnee;
+    }
+    return -1;
+}
+int pile_vide(Pile p) {
+    return p == NULL;
+}

@@ -1,0 +1,81 @@
+"la représentation contigue"
+#define STACK_SIZE 10
+
+
+typedef struct {
+    int T[STACK_SIZE];
+    int sommet;
+} pile;
+
+
+
+int isEmpty( pile* p) {
+    return p->sommet < 0;
+}
+
+int isFull( pile* p) {
+    return p->sommet == STACK_SIZE - 1;
+}
+int initpile( pile* p){
+     return p->sommet= -1;
+}
+
+int getTop( pile* p) {
+    if (!isEmpty(p)) {
+        return p->T[p->sommet];
+    }
+    return -1; // Indicates an empty stack
+}
+
+void push(pile* p, int value) {
+    if (!isFull(p)) {
+        p->sommet++;
+        p->T[p->sommet] = value;
+    } else {
+        printf("Stack is full. Cannot push element.\n");
+    }
+}
+
+int pop(pile* p) {
+    if (!isEmpty(p)) {
+        int value = getTop(p);
+        p->sommet--;
+        return value;
+    }
+    return -1; // Indicates an empty stack
+}
+"//le tri //"
+void Trierpile(pile*P) {
+    pile T, Q;
+    int x, min;
+
+    initpile(&T);
+    initpile(&Q);
+
+    while (!isEmpty(P)) {
+        // Trouver le minimum dans la pile d'origine
+        min = getTop(P);
+        while (!isEmpty(P)) {
+            x=pop(P);
+            push(&T, x);
+            if (min > x) min = x;
+        }
+
+        // Transférer les éléments de T vers Q, sauf le minimum
+        while (!isEmpty(&T)) {
+           x= pop(&T);
+            if (x != min) {
+                push(&Q, x);
+            }
+        }
+
+        // Placer le minimum dans la pile d'origine
+        push(P, min);
+    }
+
+    // Transférer les éléments tris de Q vers la pile d'origine P
+    while (!isEmpty(&Q)) {
+       x= pop(&Q);
+        push(P, x);
+    }
+}
