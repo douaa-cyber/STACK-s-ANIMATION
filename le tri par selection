@@ -6,18 +6,18 @@ void TrierPile(Pile *P) {
     Initpile(&T);
     Initpile(&Q);
 
-    while (!PileVide(*P)) {
+    while (!PileVide(P)) {
         // Trouver le minimum dans la pile d'origine
-        min = SommetPile(*P);
-        while (!PileVide(*P)) {
-            Desempiler(P, &x);
+        min = SommetPile(P);
+        while (!PileVide(P)) {
+          x= Desempiler(P);
             Empiler(&T, x);
             if (min > x) min = x;
         }
 
-        // Transf�rer les �l�ments de T vers Q, sauf le minimum
-        while (!PileVide(T)) {
-            Desempiler(&T, &x);
+        // Transférer les éléments de T vers Q, sauf le minimum
+        while (!PileVide(&T)) {
+           x= Desempiler(&T);
             if (x != min) {
                 Empiler(&Q, x);
             }
@@ -27,9 +27,9 @@ void TrierPile(Pile *P) {
         Empiler(P, min);
     }
 
-    // Transf�rer les �l�ments tri�s de Q vers la pile d'origine P
-    while (!PileVide(Q)) {
-        Desempiler(&Q, &x);
+    // Transférer les éléments tris de Q vers la pile d'origine P
+    while (!PileVide(&Q)) {
+       x= Desempiler(&Q);
         Empiler(P, x);
     }
 }
