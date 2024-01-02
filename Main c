@@ -1,4 +1,4 @@
-"la reprisentation contigue"
+"la représentation contigue"
 #define STACK_SIZE 10
 
 
