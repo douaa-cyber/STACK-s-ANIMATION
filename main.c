@@ -2,7 +2,17 @@
 #include<SDL_ttf.h>
 #include<stdio.h>
 #include<stdlib.h>
-
+#define WIDTH 640
+#define HEIGHT 480
+#define STACK_SIZE 5
+#define BUTTON_WIDTH 100
+#define BUTTON_HEIGHT 40
+#define FRAME_DELAY 1000
+int pushButtonClicked=0;
+int popButtonClicked=0;
+int peekButtonClicked=0;
+int searchButtonClicked=0;
+int sortButtonClicked=0;
 
 int main(int argc, char* argv[]) {
     SDL_Init(SDL_INIT_VIDEO);
@@ -25,54 +35,91 @@ int main(int argc, char* argv[]) {
 
     SDL_Event event;
     int running = 1;
+    int popvalue= -1;
 
     while (running) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 running = 0;
-            }
-        }
+            } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+                int mouseX, mouseY;
+                SDL_GetMouseState(&mouseX, &mouseY);
 
-        // Render the stacks
-        renderStack(renderer, font, &p, &r, -1, -1, "A", "B", -1);
-
-        printf("Commands: P (push), O (pop), Q (quit), S (sort):\n");
-        char input[10];
-        scanf("%s", &input);
-
-        if (input[0] == 'q' || input[0] == 'Q') {
-            running = 0;
-        } else if (input[0] == 'p' || input[0] == 'P') {
-            printf("Enter a number to push: ");
-            scanf("%d", &nbr);
-
-            // Check if the stack is full before pushing
-            if (!isFull(&p)) {
-                push(&p, nbr);
-            } else {
-                printf("Cannot push to a full stack.\n");
-            }
-        } else if (input[0] == 'o' || input[0] == 'O') {
-            if (isEmpty(&p)) {
-                printf("Cannot pop from an empty stack.\n");
-            } else {
-                printf("Enter a number to pop: ");
-                scanf("%d", &n);
-
-                // Check if the stack is empty before popping
-                if (!isEmpty(&p)) {
-                    moveAboveToTemp(&p, n, &r, renderer, font);
+                if (isMouseInsidePushButton(mouseX, mouseY)) {
+                    printf("Push button clicked!\n");
+                    pushButtonClicked = 1;
+                } else if (isMouseInsidePopButton(mouseX, mouseY)) {
+                    // Demander à l'utilisateur quelle valeur "popper"
+                    printf("Enter a value to pop: ");
+                    scanf("%d", &popvalue);
+                    printf("Pop button clicked for value %d!\n", popvalue);
+                    popButtonClicked = 1;
+                } else if (isMouseInsidePeekButton(mouseX, mouseY)) {
+                    printf("Peek button clicked!\n");
+                    peekButtonClicked = 1;
+                } else if (isMouseInsideSortButton(mouseX, mouseY)) {
+                    printf("Sort button clicked!\n");
+                    sortButtonClicked = 1;
+                } else if (isMouseInsideSearchButton(mouseX, mouseY)) {
+                    printf("Enter a value to search: ");
+                    int searchValue;
+                    scanf("%d", &searchValue);
+                    printf("Search button clicked for value %d!\n", searchValue);
+                    searchButtonClicked = 1;
                 }
             }
-        } else if (input[0] == 's' || input[0] == 'S') {
+        }
+        if (pushButtonClicked) {
+            printf("Enter a number to push: ");
+            int pushValue;
+            scanf("%d", &pushValue);
+            push(&p, pushValue);
+            pushButtonClicked = 0;
+        }
+
+            if (popButtonClicked) {
+            if (popvalue != -1) {
+                moveAboveToTemp(&p, popvalue ,&r,renderer,font);
+                popvalue = -1; // Réinitialiser la valeur après l'opération "pop"
+            } else {
+                printf("Please enter a value to pop.\n");
+            }
+            popButtonClicked = 0;
+        }
+        if (peekButtonClicked) {
+            if (isEmpty(&p)) {
+                printf("Cannot peek an empty stack.\n");
+            } else {
+                printf("Top of the stack: %d\n", getTop(&p));
+            }
+            peekButtonClicked = 0;
+        }
+        if (sortButtonClicked) {
             if (isEmpty(&p)) {
                 printf("Cannot sort an empty stack.\n");
             } else {
+                printf("Sort button clicked!\n");
                 sort(&p, renderer, font);
             }
+            sortButtonClicked = 0;
         }
 
-        // Introduce a delay to control the frame rate
+        if (searchButtonClicked) {
+            printf("Enter a value to search: ");
+            int searchValue;
+            scanf("%d", &searchValue);
+            search(&p, searchValue, renderer, font);
+            searchButtonClicked = 0;
+        }
+        renderStack(renderer, font, &p, &r, -1, -1, "A", "B", -1);
+
+    renderButton(renderer, font, 0, BUTTON_WIDTH, BUTTON_HEIGHT, "Push");
+    renderButton(renderer, font, 1, BUTTON_WIDTH, BUTTON_HEIGHT, "Pop");
+    renderButton(renderer, font, 2, BUTTON_WIDTH, BUTTON_HEIGHT, "Peek");
+    renderButton(renderer, font, 3, BUTTON_WIDTH, BUTTON_HEIGHT, "Sort");
+    renderButton(renderer, font, 4, BUTTON_WIDTH, BUTTON_HEIGHT, "Search");
+
+        SDL_RenderPresent(renderer);
         SDL_Delay(FRAME_DELAY);
     }
 
