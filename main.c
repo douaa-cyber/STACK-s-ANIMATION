@@ -2,8 +2,8 @@
 #include<SDL_ttf.h>
 #include<stdio.h>
 #include<stdlib.h>
-#define WIDTH 640
-#define HEIGHT 480
+#define WIDTH 670
+#define HEIGHT 490
 #define STACK_SIZE 5
 #define BUTTON_WIDTH 100
 #define BUTTON_HEIGHT 40
@@ -49,10 +49,8 @@ int main(int argc, char* argv[]) {
                     printf("Push button clicked!\n");
                     pushButtonClicked = 1;
                 } else if (isMouseInsidePopButton(mouseX, mouseY)) {
-                    // Demander à l'utilisateur quelle valeur "popper"
-                    printf("Enter a value to pop: ");
-                    scanf("%d", &popvalue);
-                    printf("Pop button clicked for value %d!\n", popvalue);
+                    
+                    printf("Pop button clicked !\n");
                     popButtonClicked = 1;
                 } else if (isMouseInsidePeekButton(mouseX, mouseY)) {
                     printf("Peek button clicked!\n");
@@ -61,10 +59,8 @@ int main(int argc, char* argv[]) {
                     printf("Sort button clicked!\n");
                     sortButtonClicked = 1;
                 } else if (isMouseInsideSearchButton(mouseX, mouseY)) {
-                    printf("Enter a value to search: ");
-                    int searchValue;
-                    scanf("%d", &searchValue);
-                    printf("Search button clicked for value %d!\n", searchValue);
+                    
+                    printf("Search button clicked!\n");
                     searchButtonClicked = 1;
                 }
             }
@@ -77,15 +73,18 @@ int main(int argc, char* argv[]) {
             pushButtonClicked = 0;
         }
 
-            if (popButtonClicked) {
-            if (popvalue != -1) {
+         if (popButtonClicked) {
+             if(isEmpty(&p)){
+                printf("cannot pop from an empty stack");
+            }else{
+               
+                printf("Enter a value to pop:");
+                scanf("%d",&popvalue);
                 moveAboveToTemp(&p, popvalue ,&r,renderer,font);
-                popvalue = -1; // Réinitialiser la valeur après l'opération "pop"
-            } else {
-                printf("Please enter a value to pop.\n");
-            }
-            popButtonClicked = 0;
+                renderStack(renderer,font,&p,&r,-1,popvalue,"A","B",-1);}
+                popButtonClicked = 0;
         }
+           
         if (peekButtonClicked) {
             if (isEmpty(&p)) {
                 printf("Cannot peek an empty stack.\n");

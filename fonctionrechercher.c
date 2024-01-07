@@ -44,4 +44,8 @@ void search(pile* p, int valueToSearch, SDL_Renderer* renderer, TTF_Font* font) 
     } else {
         printf("Value %d not found in the stack.\n", valueToSearch);
     }
+    renderStack(renderer, font, p, &temp, index, -1, "A", "B", valueToSearch);
+    SDL_Delay(FRAME_DELAY * 2);
+    renderStack(renderer, font, p, &temp, index, -1, "A", "B", -1);
+
 }

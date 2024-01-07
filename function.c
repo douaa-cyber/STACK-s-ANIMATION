@@ -10,13 +10,13 @@ void renderStack(SDL_Renderer* renderer, TTF_Font* font,  pile* p,  pile* r, int
     for (int i = 0; i <= p->sommet; i++) {
         SDL_Rect rect = {baseRect.x, baseRect.y - (i * (baseRect.h + 10)), baseRect.w, baseRect.h};
 
-        // Change the background color if the value is found
-        if (p->T[i] ==poppedValue) {
-            SDL_SetRenderDrawColor(renderer, 55, 180, 200, 0.5); // Blue background for found value
-        } else {
-            SDL_SetRenderDrawColor(renderer, 220, 100, 150, 0.5);
-        }
-
+        if (p->T[i] == poppedValue) {
+        SDL_SetRenderDrawColor(renderer, 55, 180, 200, 255); // Blue background for popped value
+    } else if (p->T[i] == foundValue) {
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // Green background for found value
+    } else {
+        SDL_SetRenderDrawColor(renderer, 220, 100, 150, 0.5);
+    }
         SDL_RenderFillRect(renderer, &rect);
         SDL_SetRenderDrawColor(renderer, 0,0, 255, 255);
 
