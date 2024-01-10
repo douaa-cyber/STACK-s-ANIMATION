@@ -64,13 +64,14 @@ void Trierpile(pile*P) {
         // Transférer les éléments de T vers Q, sauf le minimum
         while (!isEmpty(&T)) {
            x= pop(&T);
-            if (x != min) {
+            if (x == min) {
                 push(&Q, x);
+            }else {
+                push(p, x);
             }
         }
 
         // Placer le minimum dans la pile d'origine
-        push(P, min);
     }
 
     // Transférer les éléments tris de Q vers la pile d'origine P
